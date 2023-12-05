@@ -63,6 +63,8 @@ RUN curl -fSL "https://getgrav.org/download/core/grav-admin/${GRAV_VERSION}" -o 
   && rm grav.zip \
   && chown -R www-data:www-data /srv/grav
 
+VOLUME /srv/grav/web/user
+VOLUME /srv/grav/web/backup
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["php-fpm"]

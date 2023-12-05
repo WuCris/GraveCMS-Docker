@@ -1,11 +1,12 @@
 version: "3"
 
 services:
-  grav:
-    image: grav:1.7.43
+  grav-php:
+    image: grav-php:1.7.43
     build: php
- #   volumes:
- #     - grav-files:/opt/drupal/web/sites/default/files
+    volumes:
+      - grav-files:/srv/grav/web/user
+      - grav-backup:/srv/grav/web/backup
 
 
   grav-web:
@@ -15,10 +16,12 @@ services:
       NODE_ENV: dev
     ports:
       - "7070:80"
-  #  volumes:
-  #    - grav-files:/opt/drupal/web/sites/default/files
+    volumes:
+      - grav-files:/srv/grav/web/user
+      - grav-backup:/srv/grav/web/backup
     depends_on:
-      - grav
+      - grav-php
 
-#volumes:
-#    grav-files:
+volumes:
+    grav-files:
+    grav-backup:
