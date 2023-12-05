@@ -1,0 +1,24 @@
+version: "3"
+
+services:
+  grav:
+    image: grav:1.7.43
+    build: php
+ #   volumes:
+ #     - grav-files:/opt/drupal/web/sites/default/files
+
+
+  grav-web:
+    image: grav-web:1.7.43
+    build: nginx
+    environment:
+      NODE_ENV: dev
+    ports:
+      - "7070:80"
+  #  volumes:
+  #    - grav-files:/opt/drupal/web/sites/default/files
+    depends_on:
+      - grav
+
+#volumes:
+#    grav-files:
