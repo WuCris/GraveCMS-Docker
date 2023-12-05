@@ -9,6 +9,39 @@ RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d
 #COPY config_files/settings.local.php /etc/default/template/
 #COPY config_files/settings.php /opt/drupal/web/sites/default/
 
+# Install the PHP extensions we need (adaptation of Docker offical Drupal source code)
+RUN set -eux; \
+	\
+	apk add --no-cache --virtual .build-deps \
+		coreutils \
+		freetype-dev \
+		libjpeg-turbo-dev \
+		libpng-dev \
+		libwebp-dev \
+		libzip-dev \
+	; \
+	\
+	docker-php-ext-configure gd \
+		--with-freetype \
+		--with-jpeg=/usr/include \
+		--with-webp \
+	; \
+	\
+	docker-php-ext-install -j "$(nproc)" \
+		gd \
+		opcache \
+		zip \
+	; \
+	\
+	runDeps="$( \
+		scanelf --needed --nobanner --format '%n#p' --recursive /usr/local \
+			| tr ',' '\n' \
+			| sort -u \
+			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
+	)"; \
+	apk add --no-network --virtual .drupal-phpexts-rundeps $runDeps; \
+	apk del --no-network .build-deps
+
 WORKDIR /srv/grav
 
 ENV GRAV_VERSION 1.7.43
