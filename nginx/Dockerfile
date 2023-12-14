@@ -1,4 +1,4 @@
-FROM grav:1.7.43 as builder
+FROM grav-php:1.7.43 as builder
 
 
 FROM nginx:1.25-alpine
