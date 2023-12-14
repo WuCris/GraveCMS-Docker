@@ -4,10 +4,6 @@ COPY docker-entrypoint.sh /
 COPY docker-entrypoint.d/ /docker-entrypoint.d/
 
 RUN chmod 775 -R /docker-entrypoint.sh /docker-entrypoint.d
-#  && mkdir -p /etc/default/template
-
-#COPY config_files/settings.local.php /etc/default/template/
-#COPY config_files/settings.php /opt/drupal/web/sites/default/
 
 # Install the PHP extensions we need (adaptation of Docker offical Drupal source code)
 RUN set -eux; \
